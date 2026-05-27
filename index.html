@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Passport & Vibes Travel — Join the Waitlist</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--ivory:#F5EFE4;--deep:#0D1117;--gold:#C9A84C;--gold-light:#E8C97A;--sand:#D4B896;--text-muted:#8B7355;--border:rgba(201,168,76,0.2);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--deep);color:var(--ivory);font-family:'DM Sans',sans-serif;font-weight:300;min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");opacity:0.4;pointer-events:none;z-index:1;}
+  .bg-texture{position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 20% 80%,rgba(201,168,76,0.06) 0%,transparent 60%),radial-gradient(ellipse 60% 60% at 80% 20%,rgba(201,168,76,0.04) 0%,transparent 50%),linear-gradient(180deg,#0D1117 0%,#120E0A 50%,#0D1117 100%);z-index:0;}
+  .map-lines{position:fixed;inset:0;z-index:0;overflow:hidden;opacity:0.04;}
+  .map-lines svg{width:100%;height:100%;}
+  .page{display:none;position:relative;z-index:2;min-height:100vh;}
+  .page.active{display:grid;grid-template-columns:1fr 1fr;max-width:1400px;margin:0 auto;}
+  #page-confirm.active{display:flex;align-items:center;justify-content:center;}
+  .left-panel{padding:60px 60px 60px 80px;display:flex;flex-direction:column;justify-content:space-between;position:sticky;top:0;height:100vh;}
+  .logo{font-family:'Cormorant Garamond',serif;font-size:13px;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);opacity:0;animation:fadeUp 0.8s ease 0.1s forwards;}
+  .logo span{color:var(--text-muted);}
+  .hero-content{flex:1;display:flex;flex-direction:column;justify-content:center;padding:40px 0;}
+  .label{font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:24px;opacity:0;animation:fadeUp 0.8s ease 0.3s forwards;display:flex;align-items:center;gap:12px;}
+  .label::before{content:'';width:32px;height:1px;background:var(--gold);display:inline-block;}
+  h1{font-family:'Cormorant Garamond',serif;font-size:clamp(52px,5vw,72px);font-weight:300;line-height:1.05;color:var(--ivory);opacity:0;animation:fadeUp 0.8s ease 0.5s forwards;}
+  h1 em{font-style:italic;color:var(--gold-light);}
+  .subhead{margin-top:28px;font-size:15px;line-height:1.8;color:var(--sand);max-width:380px;opacity:0;animation:fadeUp 0.8s ease 0.7s forwards;}
+  .social-proof{display:flex;align-items:center;gap:24px;margin-top:48px;opacity:0;animation:fadeUp 0.8s ease 0.9s forwards;}
+  .proof-item{display:flex;flex-direction:column;gap:4px;}
+  .proof-number{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--ivory);line-height:1;}
+  .proof-label{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);}
+  .proof-divider{width:1px;height:36px;background:var(--border);}
+  .live-counter{display:inline-flex;align-items:center;gap:10px;background:rgba(201,168,76,0.08);border:1px solid var(--border);padding:10px 18px;border-radius:2px;margin-top:40px;opacity:0;animation:fadeUp 0.8s ease 1.1s forwards;}
+  .live-dot{width:6px;height:6px;background:#4CAF82;border-radius:50%;animation:pulse-dot 2s ease infinite;}
+  @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
+  .counter-text{font-size:12px;color:var(--sand);}
+  .counter-number{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--gold-light);}
+  .footer-note{font-size:11px;color:var(--text-muted);opacity:0;animation:fadeUp 0.8s ease 1.2s forwards;}
+  .right-panel{padding:60px 80px 60px 60px;display:flex;align-items:center;}
+  .form-container{width:100%;max-width:480px;opacity:0;animation:fadeUp 0.9s ease 0.6s forwards;}
+  .step-indicator{display:flex;align-items:center;margin-bottom:40px;}
+  .step-dot{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text-muted);transition:all 0.4s ease;}
+  .step-dot.active{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,0.1);box-shadow:0 0 20px rgba(201,168,76,0.2);}
+  .step-dot.done{border-color:var(--gold);background:var(--gold);color:var(--deep);}
+  .step-line{flex:1;height:1px;background:var(--border);transition:background 0.4s ease;}
+  .step-line.active{background:var(--gold);}
+  .form-step{display:none;}
+  .form-step.active{display:block;animation:stepIn 0.4s ease forwards;}
+  @keyframes stepIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+  .step-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:300;color:var(--ivory);margin-bottom:8px;line-height:1.2;}
+  .step-subtitle{font-size:13px;color:var(--text-muted);margin-bottom:36px;line-height:1.6;}
+  .field-group{margin-bottom:20px;}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  label{display:block;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;}
+  input,select,textarea{width:100%;background:rgba(245,239,228,0.04);border:1px solid var(--border);border-radius:2px;padding:14px 16px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;color:var(--ivory);outline:none;transition:all 0.3s ease;appearance:none;-webkit-appearance:none;}
+  input::placeholder,textarea::placeholder{color:rgba(139,115,85,0.5);}
+  input:focus,select:focus,textarea:focus{border-color:var(--gold);background:rgba(201,168,76,0.06);box-shadow:0 0 0 3px rgba(201,168,76,0.08);}
+  select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238B7355' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;padding-right:40px;}
+  select option{background:#1A1410;color:var(--ivory);}
+  .chip-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px;}
+  .chip{padding:10px 12px;border:1px solid var(--border);border-radius:2px;font-size:12px;color:var(--sand);cursor:pointer;transition:all 0.25s ease;text-align:center;user-select:none;}
+  .chip:hover{border-color:rgba(201,168,76,0.4);color:var(--ivory);}
+  .chip.selected{border-color:var(--gold);background:rgba(201,168,76,0.12);color:var(--gold-light);}
+  .chip-note{font-size:11px;color:var(--text-muted);margin-top:8px;}
+  .budget-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:8px;}
+  .budget-card{padding:16px;border:1px solid var(--border);border-radius:2px;cursor:pointer;transition:all 0.25s ease;user-select:none;}
+  .budget-card:hover{border-color:rgba(201,168,76,0.4);}
+  .budget-card.selected{border-color:var(--gold);background:rgba(201,168,76,0.08);}
+  .budget-range{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--ivory);display:block;margin-bottom:2px;}
+  .budget-label{font-size:10px;letter-spacing:0.1em;color:var(--text-muted);text-transform:uppercase;}
+  .btn-primary{width:100%;padding:17px 32px;background:var(--gold);color:var(--deep);border:none;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;transition:all 0.3s ease;margin-top:28px;position:relative;overflow:hidden;}
+  .btn-primary::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,0.15);transform:translateX(-100%);transition:transform 0.4s ease;}
+  .btn-primary:hover::before{transform:translateX(0);}
+  .btn-primary:hover{background:var(--gold-light);transform:translateY(-1px);box-shadow:0 8px 24px rgba(201,168,76,0.3);}
+  .btn-primary:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+  .btn-back{background:none;border:none;color:var(--text-muted);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;margin-top:16px;transition:color 0.2s;display:flex;align-items:center;gap:8px;}
+  .btn-back:hover{color:var(--sand);}
+  .progress-bar{width:100%;height:2px;background:var(--border);margin-bottom:36px;border-radius:2px;overflow:hidden;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:2px;transition:width 0.5s cubic-bezier(0.4,0,0.2,1);}
+  .scarcity{background:rgba(201,168,76,0.06);border:1px solid var(--border);padding:14px 18px;border-radius:2px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+  .scarcity-text{font-size:12px;color:var(--sand);line-height:1.4;}
+  .scarcity-text strong{color:var(--gold-light);}
+  .spots-remaining{font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--gold);line-height:1;flex-shrink:0;}
+  .spots-label{font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);display:block;text-align:right;}
+  .field-error{font-size:11px;color:#E07070;margin-top:5px;display:none;}
+  .field-group.error input,.field-group.error select{border-color:rgba(224,112,112,0.5);}
+  .field-group.error .field-error{display:block;}
+  /* Setup banner */
+  .setup-banner{background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.3);border-radius:2px;padding:14px 18px;margin-bottom:24px;font-size:12px;color:var(--sand);line-height:1.7;}
+  .setup-banner strong{color:var(--gold-light);display:block;margin-bottom:4px;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;}
+  .setup-banner code{background:rgba(201,168,76,0.15);padding:1px 6px;border-radius:2px;font-size:11px;color:var(--gold-light);font-family:monospace;}
+  /* Confirmation */
+  .confirm-box{text-align:center;padding:60px 40px;max-width:560px;opacity:0;animation:fadeUp 0.6s ease 0.2s forwards;}
+  .confirm-icon{width:64px;height:64px;border:1px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 28px;font-size:24px;color:var(--gold);animation:glow 2s ease infinite;}
+  @keyframes glow{0%,100%{box-shadow:0 0 20px rgba(201,168,76,0.2)}50%{box-shadow:0 0 40px rgba(201,168,76,0.4)}}
+  .confirm-title{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;color:var(--ivory);margin-bottom:16px;line-height:1.1;}
+  .confirm-title em{font-style:italic;color:var(--gold-light);}
+  .confirm-subtitle{font-size:15px;color:var(--sand);line-height:1.8;margin-bottom:36px;}
+  .position-badge{display:inline-flex;align-items:center;gap:16px;background:rgba(201,168,76,0.08);border:1px solid var(--border);padding:20px 32px;border-radius:2px;margin-bottom:36px;}
+  .position-num{font-family:'Cormorant Garamond',serif;font-size:56px;font-weight:300;color:var(--gold-light);line-height:1;}
+  .position-info{text-align:left;}
+  .position-info strong{display:block;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);font-weight:400;margin-bottom:4px;}
+  .position-info span{font-size:12px;color:var(--text-muted);}
+  .confirm-perks{display:flex;flex-direction:column;gap:12px;text-align:left;margin-bottom:32px;max-width:400px;margin-left:auto;margin-right:auto;}
+  .perk-item{display:flex;align-items:flex-start;gap:12px;font-size:13px;color:var(--sand);line-height:1.5;}
+  .perk-item::before{content:'✦';color:var(--gold);font-size:10px;margin-top:3px;flex-shrink:0;}
+  .share-prompt{border-top:1px solid var(--border);padding-top:24px;margin-top:8px;max-width:400px;margin-left:auto;margin-right:auto;}
+  .share-prompt p{font-size:12px;color:var(--text-muted);margin-bottom:14px;}
+  .share-link-box{display:flex;}
+  .share-link{flex:1;background:rgba(245,239,228,0.04);border:1px solid var(--border);border-right:none;border-radius:2px 0 0 2px;padding:10px 14px;font-size:12px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .copy-btn{padding:10px 18px;background:rgba(201,168,76,0.12);border:1px solid var(--border);border-radius:0 2px 2px 0;color:var(--gold);font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:0.1em;transition:all 0.2s;}
+  .copy-btn:hover{background:rgba(201,168,76,0.2);}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+  @media(max-width:900px){
+    .page.active{grid-template-columns:1fr;}
+    .left-panel{position:static;height:auto;padding:48px 32px 32px;}
+    .right-panel{padding:0 32px 64px;align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+<div class="bg-texture"></div>
+<div class="map-lines">
+  <svg viewBox="0 0 1400 900" preserveAspectRatio="none">
+    <g stroke="#C9A84C" stroke-width="0.5" fill="none">
+      <ellipse cx="700" cy="450" rx="680" ry="100"/><ellipse cx="700" cy="450" rx="680" ry="200"/>
+      <ellipse cx="700" cy="450" rx="680" ry="300"/><ellipse cx="700" cy="450" rx="680" ry="380"/>
+      <ellipse cx="700" cy="450" rx="100" ry="420"/><ellipse cx="700" cy="450" rx="200" ry="420"/>
+      <ellipse cx="700" cy="450" rx="340" ry="420"/><ellipse cx="700" cy="450" rx="500" ry="420"/>
+      <ellipse cx="700" cy="450" rx="640" ry="420"/>
+    </g>
+  </svg>
+</div>
+
+<!-- ══ WAITLIST PAGE ══ -->
+<div class="page active" id="page-form">
+  <div class="left-panel">
+    <div class="logo">Passport <span>&</span> Vibes Travel, LLC</div>
+    <div class="hero-content">
+      <div class="label">Priority Access</div>
+      <h1>Your Next<br><em>Journey</em><br>Awaits.</h1>
+      <p class="subhead">We don't do ordinary. Every trip we curate is intentional, immersive, and built for those who travel with purpose — not just a passport stamp.</p>
+      <div class="social-proof">
+        <div class="proof-item"><span class="proof-number">247</span><span class="proof-label">On waitlist</span></div>
+        <div class="proof-divider"></div>
+        <div class="proof-item"><span class="proof-number">94%</span><span class="proof-label">Book on launch</span></div>
+        <div class="proof-divider"></div>
+        <div class="proof-item"><span class="proof-number">12</span><span class="proof-label">Destinations</span></div>
+      </div>
+      <div class="live-counter">
+        <div class="live-dot"></div>
+        <span class="counter-text"><span class="counter-number" id="recentCount">3</span> people joined in the last hour</span>
+      </div>
+    </div>
+    <p class="footer-note">No spam. No nonsense. Just first access when doors open.</p>
+  </div>
+
+  <div class="right-panel">
+    <div class="form-container">
+
+      
+        <div class="field-group" style="margin-top:20px">
+          <label>Experience Type — What calls to you?</label>
+          <select id="tripType">
+            <option value="" disabled selected>Select your vibe</option>
+            <option>Luxury group / curated trips</option>
+            <option>Destination wedding or honeymoon</option>
+            <option>Solo or couples custom itinerary</option>
+            <option>Cultural & heritage immersion</option>
+            <option>Adventure & expedition</option>
+            <option>All-inclusive resort getaway</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Anything you'd like us to know? (Optional)</label>
+          <textarea id="notes" rows="3" placeholder="Dream destination, special occasion, custom requests..."></textarea>
+        </div>
+        <button class="btn-primary" type="button" id="submitBtn" onclick="submitForm()">🌍 &nbsp; Secure My Spot on the Waitlist</button>
+        <button class="btn-back" type="button" onclick="goToStep(2)">← Back</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ CONFIRMATION PAGE ══ -->
+<div class="page" id="page-confirm">
+  <div class="confirm-box">
+    <div class="confirm-icon">✦</div>
+    <h2 class="confirm-title">You're on the<br><em>inside.</em></h2>
+    <p class="confirm-subtitle">Welcome to the Passport & Vibes family.<br>Your spot is locked in. We'll reach out personally when doors open.</p>
+    <div class="position-badge">
+      <div class="position-num" id="yourPosition">#248</div>
+      <div class="position-info"><strong>Your Position</strong><span>Priority access secured</span></div>
+    </div>
+    <div class="confirm-perks">
+      <div class="perk-item">48-hour head start before the public — your spot is held while others wait.</div>
+      <div class="perk-item">A personal note from our team with what's launching and why it's worth every penny.</div>
+      <div class="perk-item">Exclusive waitlist-only pricing on select departures.</div>
+      <div class="perk-item">Move up the list by referring a friend below.</div>
+    </div>
+    <div class="share-prompt">
+      <p>Know someone who should be on this list? Share your link to move up.</p>
+      <div class="share-link-box">
+        <div class="share-link" id="shareLink">passportandvibes.com/waitlist?ref=PV248</div>
+        <button class="copy-btn" onclick="copyLink()">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── Formspree config ─────────────────────────────────────
+  // Paste your Formspree form ID here after creating your account
+  // e.g. 'xpwzgkrb'  →  FORMSPREE_ID = 'xpwzgkrb'
+  let FORMSPREE_ID = 'xgoqpdpv';
+
+      FORMSPREE_ID = id;
+    localStorage.setItem('pvFormspreeId', id);
+    
+    alert('✓ Formspree ID saved! You\'re ready to accept submissions.');
+  }
+
+  // ── State ────────────────────────────────────────────────
+  const BASE = 247;
+  let step=1, destinations=[], budget='';
+  let count = parseInt(localStorage.getItem('pvCount')||BASE);
+  setInterval(()=>{document.getElementById('recentCount').textContent=Math.floor(Math.random()*4)+1;},9000);
+
+  // ── Step navigation ──────────────────────────────────────
+  function goToStep(s){
+    if(s===2&&!validate1()) return;
+    document.getElementById('step-'+step).classList.remove('active');
+    for(let i=1;i<=3;i++){
+      const d=document.getElementById('dot-'+i);
+      d.className='step-dot';
+      if(i<s){d.className='step-dot done';d.innerHTML='✓';}
+      else if(i===s){d.className='step-dot active';d.innerHTML='<span>'+i+'</span>';}
+      else{d.innerHTML='<span>'+i+'</span>';}
+    }
+    for(let i=1;i<=2;i++) document.getElementById('line-'+i).className='step-line'+(i<s?' active':'');
+    document.getElementById('progressFill').style.width={1:'33%',2:'66%',3:'100%'}[s];
+    step=s;
+    document.getElementById('step-'+s).classList.add('active');
+  }
+
+  function validate1(){
+    const fn=document.getElementById('firstName').value.trim();
+    const ln=document.getElementById('lastName').value.trim();
+    const em=document.getElementById('email').value.trim();
+    document.getElementById('fg-firstName').classList.toggle('error',!fn);
+    document.getElementById('fg-lastName').classList.toggle('error',!ln);
+    const ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em);
+    document.getElementById('fg-email').classList.toggle('error',!ok);
+    return fn&&ln&&ok;
+  }
+
+  function toggleChip(el,val){
+    el.classList.toggle('selected');
+    destinations=el.classList.contains('selected')?[...destinations,val]:destinations.filter(d=>d!==val);
+  }
+
+  function selectBudget(el,val){
+    document.querySelectorAll('.budget-card').forEach(c=>c.classList.remove('selected'));
+    el.classList.add('selected'); budget=val;
+  }
+
+  function calcScore(){
+    let s=0;
+    s+={'$10,000+':5,'$5,000–$10,000':4,'$2,500–$5,000':3,'$1,000–$2,500':1}[budget]||0;
+    s+=Math.min(destinations.length,3);
+    const d=document.getElementById('travelDates').value;
+    if(d?.includes('3 months'))s+=3; else if(d?.includes('3–6'))s+=2; else if(d)s+=1;
+    if(document.getElementById('groupSize').value?.includes('10+'))s+=2;
+    if(document.getElementById('phone').value.trim())s+=1;
+    return s;
+  }
+
+  // ── Submit to Formspree ──────────────────────────────────
+  async function submitForm(){
+    if(!FORMSPREE_ID){
+      alert('Please add your Formspree ID first using the setup banner above.');
+      return;
+    }
+    const btn = document.getElementById('submitBtn');
+    btn.disabled=true; btn.textContent='Securing your spot…';
+
+    count++;
+    localStorage.setItem('pvCount', count);
+    const position = count;
+    const now = new Date();
+    const ts = now.toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'2-digit'})+' '+now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+    const ref = 'PV'+position;
+
+    const payload = {
+      'Position':        position,
+      'First Name':      document.getElementById('firstName').value.trim(),
+      'Last Name':       document.getElementById('lastName').value.trim(),
+      'Email':           document.getElementById('email').value.trim(),
+      'Phone':           document.getElementById('phone').value.trim()||'N/A',
+      'Destinations':    destinations.join(', ')||'Not specified',
+      'Travel Dates':    document.getElementById('travelDates').value||'Not specified',
+      'Group Size':      document.getElementById('groupSize').value||'Not specified',
+      'Budget':          budget||'Not specified',
+      'Trip Type':       document.getElementById('tripType').value||'Not specified',
+      'Lead Score':      calcScore()+'/14',
+      'Notes':           document.getElementById('notes').value.trim()||'N/A',
+      'Timestamp':       ts,
+      'Referral Code':   ref,
+      '_subject':        '🌍 New Waitlist Signup — '+document.getElementById('firstName').value.trim()+' '+document.getElementById('lastName').value.trim()
+    };
+
+    try {
+      const res = await fetch('https://formspree.io/f/'+FORMSPREE_ID, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json', 'Accept':'application/json'},
+        body: JSON.stringify(payload)
+      });
+
+      if(res.ok){
+        showConfirmation(position, ref);
+      } else {
+        const err = await res.json();
+        btn.disabled=false; btn.textContent='🌍  Secure My Spot on the Waitlist';
+        alert('Submission error: '+(err.error||'Please try again.'));
+      }
+    } catch(e){
+      btn.disabled=false; btn.textContent='🌍  Secure My Spot on the Waitlist';
+      alert('Network error — please check your connection and try again.');
+    }
+  }
+
+  function showConfirmation(position, ref){
+    document.getElementById('yourPosition').textContent = '#'+position;
+    document.getElementById('shareLink').textContent = 'passportandvibes.com/waitlist?ref='+ref;
+    document.getElementById('spotsLeft').textContent = Math.max(1,18-(count-BASE));
+    document.getElementById('page-form').classList.remove('active');
+    document.getElementById('page-confirm').classList.add('active');
+    window.scrollTo(0,0);
+  }
+
+  function copyLink(){
+    navigator.clipboard.writeText(document.getElementById('shareLink').textContent).then(()=>{
+      const b=document.querySelector('.copy-btn');
+      b.textContent='Copied!'; b.style.color='#4CAF82';
+      setTimeout(()=>{b.textContent='Copy';b.style.color='';},2000);
+    });
+  }
+</script>
+</body>
+</html>
